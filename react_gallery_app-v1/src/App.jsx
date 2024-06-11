@@ -9,12 +9,16 @@ import Photo from './components/Photo';
 import Nav from './components/Nav';
 import Search from './components/Search';
 
-const apiKey = apiKey;
+const myApiKey = apiKey;
+let userApiKey;
 
 function App() {
   const fetchData = query => {
-    const jsonData = fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`);
+    const jsonData = fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${myApiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`);
   };
+  
+   const [data, setData] = useState(jsonData);
+
   return (
     <div className='container'>
       <Routes>
