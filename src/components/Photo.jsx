@@ -4,4 +4,4 @@ const Photo = () => (
     <p>Photo component here</p>
 );
 
-export default PhotoList;
+export default Photo;

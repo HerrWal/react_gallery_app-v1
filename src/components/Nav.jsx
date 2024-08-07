@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, NavLink } from "react-router";
+import { Outlet, NavLink } from "react-router-dom";
 
 const Nav = () => (
     <nav class="main-nav">

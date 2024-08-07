@@ -7,7 +7,7 @@ import { Route, Routes, Navigate } from 'react-router';
 import PhotoList from './components/PhotoList';
 import Photo from './components/Photo';
 import Nav from './components/Nav';
-import Search from './components/Search';
+import Search from './components/Search'
 
 const myApiKey = apiKey;
 let userApiKey;
