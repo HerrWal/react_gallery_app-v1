@@ -13,7 +13,8 @@ let userApiKey;
 function App() {
 
   const fetchData = (query) => {
-    const [photos, setPhotos] = useState([]);    
+    const [photos, setPhotos] = useState([]);   
+    console.log(typeof(photos));
     useEffect(() => {
       fetch(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${myApiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
