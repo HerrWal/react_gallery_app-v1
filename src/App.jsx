@@ -11,48 +11,41 @@ const myApiKey = apiKey;
 let userApiKey;
 
 function App() {
+  const [photos, setPhotos] = useState([]);
 
   const fetchData = (query) => {
-    const [photos, setPhotos] = useState([]);   
-    console.log(typeof(photos));
-    useEffect(() => {
-      fetch(
-        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${myApiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
-        
-      )
-        .then((response) => response.json())
-        .then((responseData) => setPhotos(responseData))
-        .catch((error) =>
-          console.log("Error fetching and parsing data", error)
-        );
-    }, [query]);
-    return photos
+    fetch(
+      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
+    )
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData.photos && responseData.photos.photo) {
+          setPhotos(responseData.photos.photo); 
+        } else {
+          setPhotos([]);
+        }
+      })
+      .catch((error) => console.log("Error fetching and parsing data", error));
   };
 
   return (
     <div className="container">
+      <Search fetchData={fetchData} />
+      <Nav />
       <Routes>
-        <Route path="/" element={<Navigate replace to="/cats" />}></Route>
-        <Route
-          path="/cats"
-          element={<PhotoList fetchData={fetchData} topic={'cats'} />}
-        ></Route>
-        <Route
-          path="/dogs"
-          element={<PhotoList fetchData={fetchData} topic={'dogs'} />}
-        ></Route>
-        <Route
-          path="/computers"
-          element={<PhotoList fetchData={fetchData} topic={'computers'} />}
-        ></Route>
+      <Route path="/" element={<Navigate replace to="/cats" />} />
+        {["cats", "dogs", "computers"].map((topic) => (
+          <Route
+            key={topic}
+            path={`/${topic}`}            
+            element={<PhotoList fetchData={() => fetchData(topic)} photos={photos} />}
+          />
+        ))}
         <Route
           path="/search/:query"
-          element={<PhotoList fetchData={fetchData} />}
-        ></Route>
+          element={<PhotoList fetchData={(query) => fetchData(query)} photos={photos} />}
+        />
       </Routes>
-
-    <Search fetchData={fetchData} />
-      <Nav />
     </div>
   );
 }
