@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Nav = () => (
     <nav className="main-nav">
@@ -8,7 +8,6 @@ const Nav = () => (
             <li><NavLink to='/dogs'>Dogs</NavLink></li>
             <li><NavLink to='/computers'>Computers</NavLink></li>
         </ul>
-        <Outlet />
     </nav>
 );
 

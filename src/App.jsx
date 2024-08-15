@@ -12,6 +12,7 @@ let userApiKey;
 
 function App() {
   const [photos, setPhotos] = useState([]);
+  const [topic, setTopic] = useState("");
 
   const fetchData = (query) => {
     fetch(
@@ -20,7 +21,7 @@ function App() {
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData.photos && responseData.photos.photo) {
-          setPhotos(responseData.photos.photo); 
+          setPhotos(responseData.photos.photo);
         } else {
           setPhotos([]);
         }
@@ -33,21 +34,44 @@ function App() {
       <Search fetchData={fetchData} />
       <Nav />
       <Routes>
-      <Route path="/" element={<Navigate replace to="/cats" />} />
+        <Route path="/" element={<Navigate replace to="/cats" />} />
         {["cats", "dogs", "computers"].map((topic) => (
           <Route
             key={topic}
-            path={`/${topic}`}            
-            element={<PhotoList fetchData={() => fetchData(topic)} photos={photos} />}
+            path={`/${topic}`}
+            element={
+              <PhotoList
+                fetchData={useEffect(() => {
+                  fetchData(topic);
+                }, [topic])}
+                photos={photos}
+              />
+            }
           />
         ))}
         <Route
           path="/search/:query"
-          element={<PhotoList fetchData={(query) => fetchData(query)} photos={photos} />}
+          element={
+            <PhotoList
+              fetchData={(query) => fetchData(query)}
+              photos={photos}
+            />
+          }
         />
       </Routes>
     </div>
   );
+
+  // New component to handle the URL parameter
+  function PhotoListWithParams({ fetchData, photos }) {
+    const { query } = useParams();
+
+    useEffect(() => {
+      fetchData(query);
+    }, [query]);
+
+    return <PhotoList photos={photos} />;
+  }
 }
 
 export default App;

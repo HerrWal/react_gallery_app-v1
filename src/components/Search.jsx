@@ -2,22 +2,30 @@ import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Search = ({ fetchData }) => {
-    // const query = useParams();
-    const userQuery = useRef();
-    const navigate = useNavigate();
+  // const query = useParams();
+  const userQuery = useRef();
+  const navigate = useNavigate();
 
-    const handleSummit = e => {
-        e,preventDefault();
-        const userQuery = e.current.target.value
-        fetData(userQuery);
-        const path = `search/${userQuery}`;
-        navigate(path)
-        e.currentTarget.reset();
+  const handleSummit = (e) => {
+    e.preventDefault();
+    const userQuery = userQueryRef.current.value.trim();
+    if (userQuery) {
+      fetchData(userQuery);
+      const path = `/search/${userQuery}`;
+      navigate(path);
+      e.currentTarget.reset();
     }
-    
+  };
+
   return (
     <form className="search-form" onSubmit={handleSummit}>
-      <input type="search" name="search" placeholder="Search" ref={userQuery} required />
+      <input
+        type="search"
+        name="search"
+        placeholder="Search"
+        ref={userQuery}
+        required
+      />
       <button type="submit" className="search-button">
         <svg
           fill="#fff"

@@ -14,7 +14,13 @@ const PhotoList = ({ photos }) => {
   return (
     <div className="photo-container">
       <h2>Results</h2>
-      <ul>{results}</ul>
+      <ul>
+        {results.length > 0 ? (
+          results
+        ) : (
+          <p>No results found. Please try a different search.</p>
+        )}
+      </ul>
     </div>
   );
 };
