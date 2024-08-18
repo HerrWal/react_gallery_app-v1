@@ -2,13 +2,12 @@ import React from "react";
 import Photo from "./Photo";
 
 const PhotoList = ({ photos }) => {
-  console.log(photos);
   const results = photos.map((photo) => {
     const serverId = photo.server;
     const id = photo.id;
     const secret = photo.secret;
     const photoUrl = `https://live.staticflickr.com/${serverId}/${id}_${secret}.jpg`;
-    return <Photo key={id} url={photoUrl} />;
+    return <Photo id={id} url={photoUrl} />;
   });
 
   return (

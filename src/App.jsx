@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import apiKey from "./config";
-import { Route, Routes, Navigate } from "react-router";
+import { Route, Routes, Navigate, useLocation } from "react-router";
 
 // Components
 import PhotoList from "./components/PhotoList";
@@ -12,7 +12,7 @@ let userApiKey;
 
 function App() {
   const [photos, setPhotos] = useState([]);
-  const [topic, setTopic] = useState("");
+  const location = useLocation();
 
   const fetchData = (query) => {
     fetch(
@@ -29,6 +29,11 @@ function App() {
       .catch((error) => console.log("Error fetching and parsing data", error));
   };
 
+  useEffect(() => {
+    const path = location.pathname.slice(1) || "cats";
+    fetchData(path);
+  }, [location]);
+
   return (
     <div className="container">
       <Search fetchData={fetchData} />
@@ -39,23 +44,13 @@ function App() {
           <Route
             key={topic}
             path={`/${topic}`}
-            element={
-              <PhotoList
-                fetchData={useEffect(() => {
-                  fetchData(topic);
-                }, [topic])}
-                photos={photos}
-              />
-            }
+            element={<PhotoList photos={photos} />}
           />
         ))}
         <Route
           path="/search/:query"
           element={
-            <PhotoList
-              fetchData={(query) => fetchData(query)}
-              photos={photos}
-            />
+            <PhotoListWithParams fetchData={fetchData} photos={photos} />
           }
         />
       </Routes>
