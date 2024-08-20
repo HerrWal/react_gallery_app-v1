@@ -1,37 +1,36 @@
 import React, { useEffect, useState } from "react";
-import apiKey from "./config";
-import { Route, Routes, Navigate, useLocation } from "react-router";
+import {
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 // Components
 import PhotoList from "./components/PhotoList";
 import Nav from "./components/Nav";
 import Search from "./components/Search";
+import apiKey from "./config";
 
-const myApiKey = apiKey;
-let userApiKey;
-
-function App() {
+const App = () => {
   const [photos, setPhotos] = useState([]);
   const location = useLocation();
 
-  const fetchData = (query) => {
-    fetch(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
-    )
-      .then((response) => response.json())
-      .then((responseData) => {
-        if (responseData.photos && responseData.photos.photo) {
-          setPhotos(responseData.photos.photo);
-        } else {
-          setPhotos([]);
-        }
-      })
-      .catch((error) => console.log("Error fetching and parsing data", error));
+  const fetchData = async (query) => {
+    try {
+      const response = await fetch(
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
+      );
+      const data = await response.json();
+      setPhotos(data.photos?.photo || []);
+    } catch (error) {
+      console.log("Error fetching and parsing data", error);
+    }
   };
 
   useEffect(() => {
-    const path = location.pathname.slice(1) || "cats";
-    fetchData(path);
+    fetchData(location.pathname.slice(1) || "cats");
   }, [location]);
 
   return (
@@ -56,17 +55,16 @@ function App() {
       </Routes>
     </div>
   );
+};
 
-  // New component to handle the URL parameter
-  function PhotoListWithParams({ fetchData, photos }) {
-    const { query } = useParams();
+const PhotoListWithParams = ({ fetchData, photos }) => {
+  const { query } = useParams();
 
-    useEffect(() => {
-      fetchData(query);
-    }, [query]);
+  useEffect(() => {
+    fetchData(query);
+  }, [query, fetchData]);
 
-    return <PhotoList photos={photos} />;
-  }
-}
+  return <PhotoList photos={photos} />;
+};
 
 export default App;

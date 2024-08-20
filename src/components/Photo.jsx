@@ -1,8 +1,8 @@
 import React from "react";
 
-const Photo = ({ url, id }) => (
+const Photo = ({ url }) => (
     <li>
-        <img src={url} key={id} alt="" />
+        <img src={url} alt="" />
     </li>
 );
 
