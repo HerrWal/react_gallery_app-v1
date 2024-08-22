@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-  useLocation,
-  useParams,
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 // Components
 import PhotoList from "./components/PhotoList";
@@ -15,7 +9,7 @@ import apiKey from "./config";
 
 const App = () => {
   const [photos, setPhotos] = useState([]);
-  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("cats");
 
   const fetchData = async (query) => {
     try {
@@ -29,13 +23,17 @@ const App = () => {
     }
   };
 
+  const changeQuery = (newQuery) => {
+    setSearchQuery(newQuery);
+  };
+
   useEffect(() => {
-    fetchData(location.pathname.slice(1) || "cats");
-  }, [location]);
+    fetchData(searchQuery);
+  }, [searchQuery]);
 
   return (
     <div className="container">
-      <Search fetchData={fetchData} />
+      <Search />
       <Nav />
       <Routes>
         <Route path="/" element={<Navigate replace to="/cats" />} />
@@ -43,28 +41,28 @@ const App = () => {
           <Route
             key={topic}
             path={`/${topic}`}
-            element={<PhotoList photos={photos} />}
+            element={
+              <PhotoList
+                photos={photos}
+                changeQuery={changeQuery}
+                pageTitle={searchQuery}
+              />
+            }
           />
         ))}
         <Route
           path="/search/:query"
           element={
-            <PhotoListWithParams fetchData={fetchData} photos={photos} />
+            <PhotoList
+              photos={photos}
+              changeQuery={changeQuery}
+              pageTitle={searchQuery}
+            />
           }
         />
       </Routes>
     </div>
   );
-};
-
-const PhotoListWithParams = ({ fetchData, photos }) => {
-  const { query } = useParams();
-
-  useEffect(() => {
-    fetchData(query);
-  }, [query, fetchData]);
-
-  return <PhotoList photos={photos} />;
 };
 
 export default App;

@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Search = ({ fetchData }) => {
+const Search = () => {
   const userQueryRef = useRef();
   const navigate = useNavigate();
 
@@ -9,7 +9,6 @@ const Search = ({ fetchData }) => {
     e.preventDefault();
     const userQuery = userQueryRef.current.value.trim();
     if (userQuery) {
-      fetchData(userQuery);
       navigate(`/search/${userQuery}`);
       e.currentTarget.reset();
     }
