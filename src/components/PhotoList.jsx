@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Photo from "./Photo";
+import NotFound from "./NotFound";
 
 const PhotoList = ({ photos, changeQuery, pageTitle }) => {
 
@@ -19,7 +20,7 @@ const PhotoList = ({ photos, changeQuery, pageTitle }) => {
 
   return (
     <div className="photo-container">
-      <h2>Results</h2>
+      <h2>Results for {pageTitle}</h2>
       <ul>
         {photos.length > 0 ? (
           photos.map(({ id, server, secret }) => (
@@ -29,7 +30,7 @@ const PhotoList = ({ photos, changeQuery, pageTitle }) => {
             />
           ))
         ) : (
-          <p>No results found. Please try a different search.</p>
+          <NotFound />
         )}
       </ul>
     </div>
