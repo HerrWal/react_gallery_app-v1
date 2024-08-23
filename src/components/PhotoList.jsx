@@ -3,8 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import Photo from "./Photo";
 import NotFound from "./NotFound";
 
-const PhotoList = ({ photos, changeQuery, pageTitle }) => {
-
+const PhotoList = ({ photos, changeQuery, pageTitle, loading }) => {
   const location = useLocation();
   const { query } = useParams();
 
@@ -20,19 +19,25 @@ const PhotoList = ({ photos, changeQuery, pageTitle }) => {
 
   return (
     <div className="photo-container">
-      <h2>Results for {pageTitle}</h2>
-      <ul>
-        {photos.length > 0 ? (
-          photos.map(({ id, server, secret }) => (
-            <Photo
-              key={id}
-              url={`https://live.staticflickr.com/${server}/${id}_${secret}.jpg`}
-            />
-          ))
-        ) : (
-          <NotFound />
-        )}
-      </ul>
+      {loading ? (
+        <h2>Loading search results, please wait...</h2>
+      ) : (
+        <>
+          <h2>Results for {pageTitle}</h2>
+          <ul>
+            {photos.length > 0 ? (
+              photos.map(({ id, server, secret }) => (
+                <Photo
+                  key={id}
+                  url={`https://live.staticflickr.com/${server}/${id}_${secret}.jpg`}
+                />
+              ))
+            ) : (
+              <NotFound />
+            )}
+          </ul>
+        </>
+      )}
     </div>
   );
 };

@@ -36,6 +36,8 @@ const App = () => {
     fetchData(searchQuery);
   }, [searchQuery]);
 
+  console.log(loading);
+
   return (
     <div className="container">
       <Search />
@@ -54,6 +56,7 @@ const App = () => {
                   photos={photos}
                   changeQuery={changeQuery}
                   pageTitle={searchQuery}
+                  loading={loading}
                 />
               )
             }
@@ -66,11 +69,12 @@ const App = () => {
               photos={photos}
               changeQuery={changeQuery}
               pageTitle={searchQuery}
+              loading={loading}
             />
           }
         />
         <Route path="*" element={<PageNotFound />} />
-      </Routes>      
+      </Routes>
     </div>
   );
 };
