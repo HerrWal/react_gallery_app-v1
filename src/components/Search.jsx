@@ -8,7 +8,6 @@ const Search = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const userQuery = userQueryRef.current.value.trim();
-    console.log(userQuery);
     if (userQuery) {
       navigate(`/search/${userQuery}`);
       e.currentTarget.reset();
